@@ -38,6 +38,10 @@ public class ProductCreateRequest {
     @Schema(description = "Associated category identifier", example = "1")
     private Long categoryId;
 
+    @Size(max = 1000, message = "Image URL must not exceed 1000 characters")
+    @Schema(description = "Product image URL", example = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e")
+    private String imageUrl;
+
     public ProductCreateRequest() {
     }
 
@@ -48,6 +52,16 @@ public class ProductCreateRequest {
         this.stockQuantity = stockQuantity;
         this.enabled = enabled;
         this.categoryId = categoryId;
+    }
+
+    public ProductCreateRequest(String name, String description, BigDecimal price, Integer stockQuantity, Boolean enabled, Long categoryId, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.enabled = enabled;
+        this.categoryId = categoryId;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
@@ -96,5 +110,13 @@ public class ProductCreateRequest {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

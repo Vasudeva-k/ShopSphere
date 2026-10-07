@@ -497,6 +497,63 @@ class ProductServiceTest {
     }
 
     @Test
+    void createProduct_withImageUrl_savesAndReturnsResponseWithImageUrl() {
+        ProductCreateRequest request = new ProductCreateRequest(
+                "Headphones",
+                "ANC Headphones",
+                new BigDecimal("199.99"),
+                50,
+                true,
+                null,
+                "https://images.unsplash.com/photo-headphones"
+        );
+
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> {
+            Product p = invocation.getArgument(0);
+            p.setId(10L);
+            return p;
+        });
+
+        ProductResponse response = productService.createProduct(request);
+
+        assertNotNull(response);
+        assertEquals("https://images.unsplash.com/photo-headphones", response.getImageUrl());
+    }
+
+    @Test
+    void updateProduct_withImageUrl_updatesImageUrl() {
+        Product existing = new Product("Item", "Desc", new BigDecimal("50.00"), 10, true, null, "https://old.url");
+        existing.setId(3L);
+
+        when(productRepository.findById(3L)).thenReturn(Optional.of(existing));
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ProductUpdateRequest updateRequest = new ProductUpdateRequest();
+        updateRequest.setImageUrl("https://new.url");
+
+        ProductResponse response = productService.updateProduct(3L, updateRequest);
+
+        assertEquals("https://new.url", response.getImageUrl());
+    }
+
+    @Test
+    void updateProduct_withoutImageUrl_preservesExistingImageUrl() {
+        Product existing = new Product("Item", "Desc", new BigDecimal("50.00"), 10, true, null, "https://old.url");
+        existing.setId(3L);
+
+        when(productRepository.findById(3L)).thenReturn(Optional.of(existing));
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ProductUpdateRequest updateRequest = new ProductUpdateRequest();
+        updateRequest.setName("New Name");
+
+        ProductResponse response = productService.updateProduct(3L, updateRequest);
+
+        assertEquals("New Name", response.getName());
+        assertEquals("https://old.url", response.getImageUrl());
+    }
+
+    @Test
     void deleteProduct_whenProductExists_deletesSuccessfully() {
         when(productRepository.existsById(7L)).thenReturn(true);
 

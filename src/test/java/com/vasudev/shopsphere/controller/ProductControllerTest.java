@@ -114,6 +114,43 @@ class ProductControllerTest {
     }
 
     @Test
+    void createProduct_withImageUrl_returns201WithImageUrl() throws Exception {
+        ProductCreateRequest request = new ProductCreateRequest(
+                "Monitor",
+                "4K gaming monitor",
+                new BigDecimal("399.99"),
+                15,
+                true,
+                null,
+                "https://images.unsplash.com/photo-monitor"
+        );
+
+        ProductResponse response = new ProductResponse(
+                1L,
+                "Monitor",
+                "4K gaming monitor",
+                new BigDecimal("399.99"),
+                15,
+                true,
+                null,
+                "https://images.unsplash.com/photo-monitor",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        when(productService.createProduct(any(ProductCreateRequest.class))).thenReturn(response);
+
+        mockMvc.perform(post("/api/products")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + validToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Monitor"))
+                .andExpect(jsonPath("$.imageUrl").value("https://images.unsplash.com/photo-monitor"));
+    }
+
+    @Test
     void createProduct_withInvalidRequest_returns400() throws Exception {
         ProductCreateRequest request = new ProductCreateRequest(
                 "", // Blank name
@@ -403,8 +440,38 @@ class ProductControllerTest {
     }
 
     @Test
-    void unauthenticatedRequest_returns403() throws Exception {
+    void unauthenticatedGetProducts_returns200() throws Exception {
+        ProductResponse response = new ProductResponse(
+                1L,
+                "Sample Product",
+                "Description",
+                new BigDecimal("49.99"),
+                20,
+                true,
+                1L,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        when(productService.getProducts(any(Integer.class), any(Integer.class), any(), any(), any(), any(), any()))
+                .thenReturn(new PageImpl<>(List.of(response)));
+
         mockMvc.perform(get("/api/products"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void unauthenticatedMutation_returns403() throws Exception {
+        ProductCreateRequest request = new ProductCreateRequest(
+                "Sample Product",
+                "Description",
+                new BigDecimal("49.99"),
+                20,
+                true,
+                1L
+        );
+        mockMvc.perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isForbidden());
     }
 }

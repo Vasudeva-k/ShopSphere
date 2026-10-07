@@ -28,6 +28,9 @@ public class ProductResponse {
     @Schema(description = "Associated category identifier", example = "1")
     private Long categoryId;
 
+    @Schema(description = "Product image URL", example = "https://images.unsplash.com/photo-1505740420928-5e560c06d30e")
+    private String imageUrl;
+
     @Schema(description = "Creation timestamp", example = "2026-10-04T10:00:00")
     private LocalDateTime createdAt;
 
@@ -45,6 +48,19 @@ public class ProductResponse {
         this.stockQuantity = stockQuantity;
         this.enabled = enabled;
         this.categoryId = categoryId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public ProductResponse(Long id, String name, String description, BigDecimal price, Integer stockQuantity, Boolean enabled, Long categoryId, String imageUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.enabled = enabled;
+        this.categoryId = categoryId;
+        this.imageUrl = imageUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -103,6 +119,14 @@ public class ProductResponse {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public LocalDateTime getCreatedAt() {

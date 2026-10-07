@@ -80,7 +80,7 @@ export interface Product {
   active?: boolean;
   categoryId?: number;
   categoryName?: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   rating?: number;
   reviewCount?: number;
   createdAt?: string;
@@ -95,6 +95,7 @@ export interface ProductResponse {
   stockQuantity: number;
   enabled: boolean;
   categoryId: number;
+  imageUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }

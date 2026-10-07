@@ -39,6 +39,7 @@ export const ProductDetailPage: React.FC = () => {
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
   const [cartFeedback, setCartFeedback] = useState<string | null>(null);
   const [isWishlistLoading, setIsWishlistLoading] = useState<boolean>(false);
+  const [imageError, setImageError] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -46,6 +47,7 @@ export const ProductDetailPage: React.FC = () => {
       if (!productId) return;
       setIsLoading(true);
       setErrorMessage(null);
+      setImageError(false);
 
       try {
         const prodData = await productService.getProductById(Number(productId));
@@ -218,48 +220,76 @@ export const ProductDetailPage: React.FC = () => {
             background: 'var(--bg-surface)',
             border: '1px solid var(--border-color)',
             borderRadius: 'var(--radius-lg)',
-            padding: '2rem',
+            padding: '1.5rem',
             textAlign: 'center',
           }}
         >
           <div
             style={{
               height: '360px',
+              width: '100%',
+              borderRadius: 'var(--radius-md)',
+              overflow: 'hidden',
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-              borderRadius: 'var(--radius-md)',
-              padding: '2rem',
-              color: 'var(--text-muted)',
+              backgroundColor: '#f8fafc',
             }}
           >
-            <div
-              style={{
-                width: '90px',
-                height: '90px',
-                borderRadius: 'var(--radius-lg)',
-                background: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: 'var(--shadow-md)',
-                marginBottom: '1rem',
-              }}
-            >
-              {inStock ? (
-                <PackageCheck size={48} style={{ color: 'var(--secondary)' }} />
-              ) : (
-                <PackageX size={48} style={{ color: 'var(--danger)' }} />
-              )}
-            </div>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-main)' }}>
-              {displayCategoryName || 'Catalog Product'}
-            </h3>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-light)', marginTop: '0.25rem' }}>
-              Item #{product.id} · ShopSphere Verified
-            </p>
+            {product.imageUrl && !imageError ? (
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                onError={() => setImageError(true)}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: 'var(--radius-md)',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '2rem',
+                  color: 'var(--text-muted)',
+                }}
+              >
+                <div
+                  style={{
+                    width: '90px',
+                    height: '90px',
+                    borderRadius: 'var(--radius-lg)',
+                    background: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 'var(--shadow-md)',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  {inStock ? (
+                    <PackageCheck size={48} style={{ color: 'var(--secondary)' }} />
+                  ) : (
+                    <PackageX size={48} style={{ color: 'var(--danger)' }} />
+                  )}
+                </div>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                  {displayCategoryName || 'Catalog Product'}
+                </h3>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-light)', marginTop: '0.25rem' }}>
+                  Item #{product.id} · ShopSphere Verified
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

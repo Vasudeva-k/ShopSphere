@@ -47,6 +47,7 @@ public class ProductService {
         product.setStockQuantity(request.getStockQuantity());
         product.setEnabled(request.getEnabled() != null ? request.getEnabled() : true);
         product.setCategory(category);
+        product.setImageUrl(request.getImageUrl());
 
         Product savedProduct = productRepository.save(product);
         return toResponse(savedProduct);
@@ -162,6 +163,9 @@ public class ProductService {
                     .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.getCategoryId()));
             product.setCategory(category);
         }
+        if (request.getImageUrl() != null) {
+            product.setImageUrl(request.getImageUrl());
+        }
 
         Product updatedProduct = productRepository.save(product);
         return toResponse(updatedProduct);
@@ -185,6 +189,7 @@ public class ProductService {
                 product.getStockQuantity(),
                 product.getEnabled(),
                 categoryId,
+                product.getImageUrl(),
                 product.getCreatedAt(),
                 product.getUpdatedAt()
         );

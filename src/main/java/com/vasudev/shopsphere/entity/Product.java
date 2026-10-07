@@ -41,6 +41,9 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(name = "image_url", length = 1000)
+    private String imageUrl;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -66,6 +69,16 @@ public class Product {
         this.stockQuantity = stockQuantity;
         this.enabled = enabled != null ? enabled : true;
         this.category = category;
+    }
+
+    public Product(String name, String description, BigDecimal price, Integer stockQuantity, Boolean enabled, Category category, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.enabled = enabled != null ? enabled : true;
+        this.category = category;
+        this.imageUrl = imageUrl;
     }
 
     @PrePersist
@@ -141,6 +154,14 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public LocalDateTime getCreatedAt() {

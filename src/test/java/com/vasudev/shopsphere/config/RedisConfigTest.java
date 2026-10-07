@@ -23,4 +23,18 @@ class RedisConfigTest {
             });
         });
     }
+
+    @Test
+    @DisplayName("errorHandler handles get, put, evict, and clear errors without throwing")
+    void errorHandlerHandlesExceptionsGracefully() {
+        RedisConfig config = new RedisConfig();
+        var errorHandler = config.errorHandler();
+        assertNotNull(errorHandler);
+
+        RuntimeException ex = new RuntimeException("Redis connection refused");
+        assertDoesNotThrow(() -> errorHandler.handleCacheGetError(ex, null, "key1"));
+        assertDoesNotThrow(() -> errorHandler.handleCachePutError(ex, null, "key1", "val1"));
+        assertDoesNotThrow(() -> errorHandler.handleCacheEvictError(ex, null, "key1"));
+        assertDoesNotThrow(() -> errorHandler.handleCacheClearError(ex, null));
+    }
 }
