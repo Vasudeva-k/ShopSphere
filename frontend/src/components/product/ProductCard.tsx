@@ -29,6 +29,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [isAddingToCart, setIsAddingToCart] = useState<boolean>(false);
   const [isAddedSuccess, setIsAddedSuccess] = useState<boolean>(false);
   const [isWishlistLoading, setIsWishlistLoading] = useState<boolean>(false);
+  const [imageError, setImageError] = useState<boolean>(false);
 
   const rating = product.rating ?? 4.7;
   const reviewCount = product.reviewCount ?? 128;
@@ -84,8 +85,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           aria-label={`View details for ${product.name}`}
           style={{ width: '100%', height: '100%', display: 'block' }}
         >
-          {product.imageUrl ? (
-            <img src={product.imageUrl} alt={product.name} loading="lazy" />
+          {product.imageUrl && !imageError ? (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              loading="lazy"
+              onError={() => setImageError(true)}
+            />
           ) : (
             <div
               style={{

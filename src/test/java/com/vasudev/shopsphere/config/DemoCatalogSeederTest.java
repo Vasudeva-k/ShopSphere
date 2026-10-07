@@ -104,8 +104,8 @@ class DemoCatalogSeederTest {
     }
 
     @Test
-    @DisplayName("All 45 demo products must have valid HTTPS image URLs")
-    void demoProducts_allHaveValidHttpsImageUrls() {
+    @DisplayName("All 45 demo products must have valid local image paths")
+    void demoProducts_allHaveValidLocalImagePaths() {
         List<DemoCatalogSeeder.CategorySeedData> categories = seeder.getCategorySeedData();
         assertEquals(9, categories.size());
 
@@ -114,7 +114,8 @@ class DemoCatalogSeederTest {
             for (DemoCatalogSeeder.ProductSeedData prod : cat.products) {
                 totalProducts++;
                 assertNotNull(prod.imageUrl, "Image URL should not be null for " + prod.name);
-                assertTrue(prod.imageUrl.startsWith("https://"), "Image URL must start with https:// for " + prod.name);
+                assertTrue(prod.imageUrl.startsWith("/product-images/"), "Image URL must start with /product-images/ for " + prod.name);
+                assertTrue(prod.imageUrl.endsWith(".webp"), "Image URL must end with .webp for " + prod.name);
                 assertFalse(prod.imageUrl.isBlank(), "Image URL must not be blank for " + prod.name);
             }
         }
@@ -152,7 +153,7 @@ class DemoCatalogSeederTest {
 
         verify(productRepository).save(p);
         assertNotNull(p.getImageUrl());
-        assertTrue(p.getImageUrl().startsWith("https://"));
+        assertEquals("/product-images/headphones.webp", p.getImageUrl());
     }
 
     @Test
