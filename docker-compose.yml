@@ -1,0 +1,66 @@
+services:
+  mysql:
+    image: mysql:8.0.44
+    container_name: shopsphere-mysql
+    environment:
+      MYSQL_DATABASE: shopsphere
+      MYSQL_USER: shopsphere
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - shopsphere_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    container_name: shopsphere-redis
+    volumes:
+      - redis_data:/data
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+    networks:
+      - shopsphere_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    image: shopsphere-backend:1.0
+    container_name: shopsphere-backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_USERNAME: shopsphere
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/shopsphere?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - shopsphere_network
+
+networks:
+  shopsphere_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
