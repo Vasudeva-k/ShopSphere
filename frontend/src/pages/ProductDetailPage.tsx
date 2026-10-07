@@ -21,6 +21,7 @@ import { useWishlist } from '../hooks/useWishlist';
 import { productService } from '../services/productService';
 import { categoryService } from '../services/categoryService';
 import type { Product, Category } from '../types';
+import { formatCurrency } from '../utils/currency';
 
 export const ProductDetailPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -326,7 +327,7 @@ export const ProductDetailPage: React.FC = () => {
           <div style={{ marginBottom: '1.25rem' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
               <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                ${Number(product.price).toFixed(2)}
+                {formatCurrency(product.price)}
               </span>
             </div>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
@@ -379,7 +380,7 @@ export const ProductDetailPage: React.FC = () => {
           }}
         >
           <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.75rem' }}>
-            ${(Number(product.price) * quantity).toFixed(2)}
+            {formatCurrency(Number(product.price) * quantity)}
           </div>
 
           <div

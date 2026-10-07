@@ -18,6 +18,7 @@ import { useAuth } from '../hooks/useAuth';
 import { orderService } from '../services/orderService';
 import { paymentService } from '../services/paymentService';
 import type { OrderResponse, PaymentResponse } from '../types';
+import { formatCurrency } from '../utils/currency';
 import type { AxiosError } from 'axios';
 
 type CheckoutStep = 'REVIEW' | 'PAYMENT' | 'RESULT';
@@ -251,7 +252,7 @@ export const CheckoutPage: React.FC = () => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: 'var(--text-muted)' }}>Payment Amount:</span>
-              <strong style={{ color: 'var(--text-main)' }}>${Number(payment.amount).toFixed(2)}</strong>
+              <strong style={{ color: 'var(--text-main)' }}>{formatCurrency(payment.amount)}</strong>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -412,7 +413,7 @@ export const CheckoutPage: React.FC = () => {
                 Authoritative Total Amount
               </div>
               <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '0.25rem' }}>
-                ${Number(payment.amount).toFixed(2)}
+                {formatCurrency(payment.amount)}
               </div>
             </div>
           </div>
@@ -461,7 +462,7 @@ export const CheckoutPage: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <CheckCircle2 size={20} /> Simulate Successful Payment (${Number(payment.amount).toFixed(2)})
+                  <CheckCircle2 size={20} /> Simulate Successful Payment ({formatCurrency(payment.amount)})
                 </>
               )}
             </button>
@@ -689,13 +690,13 @@ export const CheckoutPage: React.FC = () => {
                         {item.productName}
                       </div>
                       <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
-                        Qty: {item.quantity} × ${Number(item.unitPrice).toFixed(2)}
+                        Qty: {item.quantity} × {formatCurrency(item.unitPrice)}
                       </div>
                     </div>
                   </div>
 
                   <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)', textAlign: 'right' }}>
-                    ${Number(item.subtotal).toFixed(2)}
+                    {formatCurrency(item.subtotal)}
                   </div>
                 </div>
               ))}
@@ -734,17 +735,17 @@ export const CheckoutPage: React.FC = () => {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
               <span>Items ({items.reduce((s, it) => s + it.quantity, 0)}):</span>
-              <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
+              <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{formatCurrency(subtotal)}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
               <span>Shipping:</span>
               <span style={{ color: shipping === 0 ? 'var(--success)' : 'var(--text-main)', fontWeight: 600 }}>
-                {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                {shipping === 0 ? 'FREE' : formatCurrency(shipping)}
               </span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
               <span>Estimated Tax (8%):</span>
-              <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>${estimatedTax.toFixed(2)}</span>
+              <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{formatCurrency(estimatedTax)}</span>
             </div>
             <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '0.5rem 0' }} />
             <div
@@ -756,7 +757,7 @@ export const CheckoutPage: React.FC = () => {
               }}
             >
               <span>Estimated Total:</span>
-              <span style={{ color: 'var(--text-main)' }}>${grandTotal.toFixed(2)}</span>
+              <span style={{ color: 'var(--text-main)' }}>{formatCurrency(grandTotal)}</span>
             </div>
           </div>
 

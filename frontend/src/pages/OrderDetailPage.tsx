@@ -19,6 +19,7 @@ import {
 import { orderService } from '../services/orderService';
 import { paymentService } from '../services/paymentService';
 import type { OrderResponse, OrderStatus, PaymentResponse, PaymentStatus } from '../types';
+import { formatCurrency } from '../utils/currency';
 import type { AxiosError } from 'axios';
 
 interface LocationState {
@@ -530,12 +531,12 @@ export const OrderDetailPage: React.FC = () => {
           <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span>Items Total:</span>
-              <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>${subtotal.toFixed(2)}</span>
+              <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{formatCurrency(subtotal)}</span>
             </div>
             <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '0.35rem 0' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-main)' }}>
               <span>Total Amount:</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{formatCurrency(subtotal)}</span>
             </div>
           </div>
         </div>
@@ -598,14 +599,14 @@ export const OrderDetailPage: React.FC = () => {
                     </span>
                   )}
                   <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                    Unit Price: ${Number(item.unitPrice).toFixed(2)} × Quantity: {item.quantity}
+                    Unit Price: {formatCurrency(item.unitPrice)} × Quantity: {item.quantity}
                   </div>
                 </div>
               </div>
 
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontWeight: 800, fontSize: '1.125rem', color: 'var(--text-main)' }}>
-                  ${Number(item.subtotal).toFixed(2)}
+                  {formatCurrency(item.subtotal)}
                 </div>
                 {item.productId && (
                   <Link

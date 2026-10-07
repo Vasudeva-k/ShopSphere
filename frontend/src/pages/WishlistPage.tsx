@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useWishlist } from '../hooks/useWishlist';
 import { useCart } from '../hooks/useCart';
+import { formatCurrency } from '../utils/currency';
 
 export const WishlistPage: React.FC = () => {
   const { wishlistItems, removeFromWishlist, clearWishlist, isLoading } = useWishlist();
@@ -152,7 +153,7 @@ export const WishlistPage: React.FC = () => {
                     {item.productName}
                   </Link>
                   <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                    ${Number(item.productPrice).toFixed(2)}
+                    {formatCurrency(item.productPrice)}
                   </div>
                   <div
                     style={{

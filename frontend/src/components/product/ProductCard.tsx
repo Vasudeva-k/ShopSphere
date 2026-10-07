@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
 import { useWishlist } from '../../hooks/useWishlist';
 import type { Product } from '../../types';
+import { formatCurrency } from '../../utils/currency';
 
 export interface ProductCardProps {
   product: Product;
@@ -169,9 +170,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Price and Discount */}
         <div className="product-pricing">
-          <span className="product-price">${Number(product.price).toFixed(2)}</span>
+          <span className="product-price">{formatCurrency(product.price)}</span>
           {originalPrice && originalPrice > product.price && (
-            <span className="product-original-price">${originalPrice.toFixed(2)}</span>
+            <span className="product-original-price">{formatCurrency(originalPrice)}</span>
           )}
           {discountPercent && discountPercent > 0 && (
             <span className="product-discount-badge">{discountPercent}% OFF</span>

@@ -12,6 +12,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
+import { formatCurrency } from '../utils/currency';
 import type { OrderResponse, OrderStatus, PageResponse } from '../types';
 import type { AxiosError } from 'axios';
 
@@ -264,7 +265,7 @@ export const OrdersPage: React.FC = () => {
                         TOTAL
                       </span>
                       <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>
-                        ${Number(order.totalAmount).toFixed(2)}
+                        {formatCurrency(order.totalAmount)}
                       </span>
                     </div>
                     <div>
@@ -333,14 +334,14 @@ export const OrdersPage: React.FC = () => {
                             </span>
                           )}
                           <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-                            Qty: {item.quantity} · ${Number(item.unitPrice).toFixed(2)} each
+                            Qty: {item.quantity} · {formatCurrency(item.unitPrice)} each
                           </div>
                         </div>
                       </div>
 
                       <div style={{ textAlign: 'right' }}>
                         <div style={{ fontWeight: 700, fontSize: '0.9375rem' }}>
-                          ${Number(item.subtotal).toFixed(2)}
+                          {formatCurrency(item.subtotal)}
                         </div>
                         {item.productId && (
                           <Link

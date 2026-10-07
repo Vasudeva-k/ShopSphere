@@ -10,6 +10,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { useCart } from '../hooks/useCart';
+import { formatCurrency } from '../utils/currency';
 
 export const CartPage: React.FC = () => {
   const { cart, updateQuantity, removeItem, clearCart, isLoading } = useCart();
@@ -178,7 +179,7 @@ export const CartPage: React.FC = () => {
                           {item.productName}
                         </Link>
                         <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                          Unit Price: ${Number(item.unitPrice).toFixed(2)}
+                          Unit Price: {formatCurrency(item.unitPrice)}
                         </div>
 
                         {/* Quantity controls */}
@@ -254,14 +255,14 @@ export const CartPage: React.FC = () => {
                     </div>
 
                     <div style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                      ${Number(item.subtotal).toFixed(2)}
+                      {formatCurrency(item.subtotal)}
                     </div>
                   </div>
                 );
               })}
 
               <div style={{ textAlign: 'right', marginTop: '1.25rem', fontSize: '1.125rem', fontWeight: 700 }}>
-                Subtotal ({items.reduce((sum, it) => sum + it.quantity, 0)} items): ${subtotal.toFixed(2)}
+                Subtotal ({items.reduce((sum, it) => sum + it.quantity, 0)} items): {formatCurrency(subtotal)}
               </div>
             </div>
 
@@ -288,17 +289,17 @@ export const CartPage: React.FC = () => {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>Items Subtotal:</span>
-                  <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>${subtotal.toFixed(2)}</span>
+                  <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{formatCurrency(subtotal)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>Shipping:</span>
                   <span style={{ color: shipping === 0 ? 'var(--success)' : 'var(--text-main)', fontWeight: 600 }}>
-                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                    {shipping === 0 ? 'FREE' : formatCurrency(shipping)}
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
                   <span>Estimated Sales Tax (8%):</span>
-                  <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>${estimatedTax.toFixed(2)}</span>
+                  <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{formatCurrency(estimatedTax)}</span>
                 </div>
                 <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '0.5rem 0' }} />
                 <div
@@ -310,7 +311,7 @@ export const CartPage: React.FC = () => {
                   }}
                 >
                   <span>Order Total:</span>
-                  <span style={{ color: 'var(--text-main)' }}>${grandTotal.toFixed(2)}</span>
+                  <span style={{ color: 'var(--text-main)' }}>{formatCurrency(grandTotal)}</span>
                 </div>
               </div>
 
